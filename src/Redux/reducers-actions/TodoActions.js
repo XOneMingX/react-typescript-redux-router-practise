@@ -45,6 +45,6 @@ export const todoDataHandler = async (userdata) => {
     const todosData = todoDocs.docs.map((doc) => {
       return { id: doc.id, todo: doc.data() }
     })
-    console.log(todosData)
+    return todosData
   }
 }

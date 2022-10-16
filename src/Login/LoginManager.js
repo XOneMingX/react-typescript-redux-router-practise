@@ -21,11 +21,16 @@ const LoginManager = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         authDispatch({ type: "LOGIN", userdata: user })
-        todoDataHandler(user)
+        setTodo(user)
         history.push("/todolist/" + user.uid)
       }
     })
   }, [authDispatch])
+
+  const setTodo = async (userdata) => {
+    const todoData = await todoDataHandler(userdata)
+    console.log(todoData)
+  }
 
   const logoutHandler = () => {
     signOut(auth).then(() => {
