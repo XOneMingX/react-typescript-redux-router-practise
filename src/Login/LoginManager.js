@@ -9,7 +9,7 @@ import {
 import { useHistory } from "react-router-dom"
 import classes from "./LoginManager.module.css"
 import { auth } from "../Config/Firebase"
-import { getUserData } from "../Redux/reducers-actions/TodoActions"
+import { todoDataHandler } from "../Redux/reducers-actions/TodoActions"
 
 const LoginManager = () => {
   const authDispatch = useDispatch()
@@ -21,7 +21,7 @@ const LoginManager = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         authDispatch({ type: "LOGIN", userdata: user })
-        getUserData(user.uid)
+        todoDataHandler(user)
         history.push("/todolist/" + user.uid)
       }
     })
@@ -30,6 +30,7 @@ const LoginManager = () => {
   const logoutHandler = () => {
     signOut(auth).then(() => {
       authDispatch({ type: "LOGOUT" })
+
       history.push("/")
     })
   }
@@ -40,7 +41,6 @@ const LoginManager = () => {
       .then((result) => {
         authDispatch({ type: "LOGIN", userdata: result.user })
         history.push("/todolist/" + result.user.uid)
-        console.log(result.user)
       })
       .catch((er) => {
         console.log(er)

@@ -1,40 +1,50 @@
 import React from "react"
-import { useDispatch } from "react-redux"
-import { collection, getDocs, query, where, doc } from "firebase/firestore"
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  setDoc,
+  doc,
+  addDoc,
+} from "firebase/firestore"
 
 import { db } from "../../Config/Firebase"
-import todo from "../../Model/Todo"
+import { useDispatch } from "react-redux"
 
 const usersDatabase = collection(db, "Users")
 
-export const getUserData = async (uid) => {
-  // return async (dispatch) => {
-  //
-  // }
-  const userData = async (uid) => {
-    const currentUser = await getDocs(
-      query(usersDatabase, where("uid", "==", uid))
-    )
-    if (currentUser) {
-      let currentUserId
-      const getCurrentUserId = await currentUser.forEach((doc) => {
-        currentUserId = doc.id
-      })
-      const todoColRef = collection(db, "Users", currentUserId, "TodoList")
-      const todoDocs = await getDocs(todoColRef)
-      const todoData = todoDocs.docs.map((doc) => {
-        console.log(doc.id, doc.data())
-      })
-      console.log(todoData)
-    } else {
-      console.log("New user")
-      //create new user in firestore
-      //create empty todo list under the user
-    }
+const userDataHandler = async (userdata) => {
+  const currentUser = await getDocs(
+    query(usersDatabase, where("uid", "==", userdata.uid))
+  )
+  if (currentUser.empty) {
+    //create new user in firestore
+    await setDoc(doc(usersDatabase), {
+      uid: userdata.uid,
+      username: userdata.displayName,
+    }).then(() => {
+      return userDataHandler(userdata)
+    })
   }
-  try {
-    const user = await userData(uid)
-  } catch (err) {
-    console.log(err)
+
+  let currentUserDocId
+  await currentUser.forEach((doc) => {
+    currentUserDocId = doc.id
+  })
+  console.log(currentUserDocId)
+  return currentUserDocId
+}
+
+export const todoDataHandler = async (userdata) => {
+  const getUserDocId = await userDataHandler(userdata)
+  console.log(getUserDocId)
+  const todoColRef = collection(db, "Users", getUserDocId, "TodoList")
+  const todoDocs = await getDocs(todoColRef)
+  if (!todoDocs.empty) {
+    const todosData = todoDocs.docs.map((doc) => {
+      return { id: doc.id, todo: doc.data() }
+    })
+    console.log(todosData)
   }
 }
