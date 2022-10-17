@@ -20,7 +20,7 @@ const userDataHandler = async (userdata) => {
 
   if (currentUser.empty) {
     //create new user in firestore
-    await setDoc(doc(usersDatabase), {
+    await setDoc(doc(usersDatabase, userdata.uid), {
       uid: userdata.uid,
       username: userdata.displayName,
     })

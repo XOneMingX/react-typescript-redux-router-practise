@@ -9,7 +9,6 @@ import {
 import { useHistory } from "react-router-dom"
 import classes from "./LoginManager.module.css"
 import { auth } from "../Config/Firebase"
-import { todoDataHandler } from "../Redux/reducers-actions/TodoActions"
 
 const LoginManager = () => {
   const authDispatch = useDispatch()
