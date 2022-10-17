@@ -12,7 +12,7 @@ export interface todoInitStateType {
 }
 
 const initialState: todoInitStateType = {
-  allTodo: [new Todo("a"), new Todo("b")],
+  allTodo: [],
 }
 
 const addItem = (state: Todo[], todo: Todo | string): Todo[] => {
@@ -48,6 +48,7 @@ const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
   state = initialState,
   action
 ) => {
+  console.log(action.data)
   switch (action.type) {
     case allAction.SET_ITEM:
       return {

@@ -17,21 +17,6 @@ const LoginManager = () => {
   const userState = useSelector((state) => state.authReducer.userdata)
   let history = useHistory()
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        authDispatch({ type: "LOGIN", userdata: user })
-        setTodo(user)
-        history.push("/todolist/" + user.uid)
-      }
-    })
-  }, [authDispatch])
-
-  const setTodo = async (userdata) => {
-    const todoData = await todoDataHandler(userdata)
-    console.log(todoData)
-  }
-
   const logoutHandler = () => {
     signOut(auth).then(() => {
       authDispatch({ type: "LOGOUT" })
