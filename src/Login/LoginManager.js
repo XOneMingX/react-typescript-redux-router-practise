@@ -1,11 +1,6 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth"
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
 import { useHistory } from "react-router-dom"
 import classes from "./LoginManager.module.css"
 import { auth } from "../Config/Firebase"
@@ -19,7 +14,6 @@ const LoginManager = () => {
   const logoutHandler = () => {
     signOut(auth).then(() => {
       authDispatch({ type: "LOGOUT" })
-
       history.push("/")
     })
   }

@@ -9,6 +9,9 @@ interface propsState {
 }
 
 const TodoItem: React.FC<propsState> = (props) => {
+  console.log(props.data)
+  console.log(props.data.text)
+
   return (
     <li
       key={props.data.id}

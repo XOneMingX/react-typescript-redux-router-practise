@@ -6,8 +6,11 @@ import { allAction } from "../../Redux/allAction"
 import { useDispatch } from "react-redux"
 import { MODAL_TYPE } from "../../Enum/MODAL_TYPE"
 import Modal from "../../Model/Modal"
+import { collection, getDocs } from "firebase/firestore"
+import { db } from "../../Config/Firebase"
 
 const TodoList: React.FC<{ items: Todo[] }> = (props) => {
+  console.log(props.items)
   const dispatch = useDispatch()
 
   const [newItemName, setNewItemName] = useState<string>("")
@@ -22,6 +25,7 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
 
   const onRemove = (todoID: string): void => {
     console.log(todoID)
+
     dispatch({
       type: allAction.SET_MODAL,
       Modal: new Modal(MODAL_TYPE.DELETE_TODO, true),
@@ -39,6 +43,7 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
     <div>
       <ul>
         {props.items.map((e: Todo, index: number) => {
+          console.log(e)
           return (
             <TodoItem
               key={index}

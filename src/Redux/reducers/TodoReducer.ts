@@ -48,7 +48,7 @@ const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
   state = initialState,
   action
 ) => {
-  console.log(action.data)
+  //console.log(action.data)
   switch (action.type) {
     case allAction.SET_ITEM:
       return {

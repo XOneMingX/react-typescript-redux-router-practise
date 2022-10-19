@@ -29,7 +29,6 @@ const TodoListPage: React.FC = (props) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const todoData: Todo[] = await todoDataHandler(userdata)
-    console.log(todoData)
     dispatch({
       type: allAction.SET_ITEM,
       data: todoData as Todo[],
