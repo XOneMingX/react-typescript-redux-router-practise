@@ -44,6 +44,27 @@ const setItemFinish = (state: Todo[], todoID: Todo | string): Todo[] => {
   return state
 }
 
+const setItemColor = (state: Todo[], todo: Todo): Todo[] => {
+  if (typeof todo === "object") {
+    const newTodo: Todo[] = [...state]
+    const index = newTodo.findIndex((e) => e.id === todo.id)
+    if (index !== -1) {
+      newTodo[index].color = todo.color
+    }
+    return newTodo
+  }
+  return state
+}
+
+const updateItem = (state: Todo[], todoID: Todo | string): Todo[] => {
+  if (typeof todoID === "string") {
+    const newTodo: Todo[] = [...state]
+    const index = newTodo.findIndex((e) => e.id === todoID)
+    return newTodo
+  }
+  return state
+}
+
 const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
   state = initialState,
   action
@@ -70,6 +91,11 @@ const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
       return {
         ...state,
         allTodo: setItemFinish(state.allTodo, action.data),
+      }
+    case allAction.SET_COLOR:
+      return {
+        ...state,
+        allTodo: setItemColor(state.allTodo, action.data),
       }
     default:
       return state

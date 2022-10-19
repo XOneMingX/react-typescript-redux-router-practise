@@ -6,11 +6,11 @@ import {
   where,
   setDoc,
   doc,
-  addDoc,
+  deleteDoc,
+  updateDoc,
 } from "firebase/firestore"
 
 import { db } from "../../Config/Firebase"
-import { useDispatch } from "react-redux"
 
 const usersDatabase = collection(db, "Users")
 
@@ -25,18 +25,12 @@ const newUserHandler = async (userdata) => {
       username: userdata.displayName,
     })
   }
-  // let currentUserDocId
-  // await currentUser.forEach((doc) => {
-  //   currentUserDocId = doc.id
-  // })
-  // console.log(currentUserDocId)
-  // return currentUserDocId
 }
 
-export const todoDataHandler = async (userdata) => {
-  await newUserHandler(userdata)
+export const todoDataHandler = async (userData) => {
+  await newUserHandler(userData)
 
-  const todoColRef = collection(db, "Users", userdata.uid, "TodoList")
+  const todoColRef = collection(db, "Users", userData.uid, "TodoList")
   const todoDocs = await getDocs(todoColRef)
 
   let todosData = []
@@ -54,4 +48,21 @@ export const todoDataHandler = async (userdata) => {
     ]
   }
   return todosData
+}
+
+export const addTodoToDatabase = async (userData, todoData) => {
+  const todoColRef = collection(db, "Users", userData.uid, "TodoList")
+  await setDoc(doc(todoColRef, todoData.id), {
+    ...todoData,
+  })
+}
+
+export const delTodoFromDatabase = async (userData, todoID) => {
+  const todoRef = doc(db, "Users", userData.uid, "TodoList", todoID)
+  await deleteDoc(todoRef)
+}
+
+export const updateTodoDataInDatabase = async (userData, todoData) => {
+  const todoRef = doc(db, "Users", userData.uid, "TodoList", todoData.id)
+  await updateDoc(todoRef, { ...todoData })
 }

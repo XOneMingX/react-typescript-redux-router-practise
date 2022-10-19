@@ -3,23 +3,35 @@ import React, { useState } from "react"
 import Todo from "../../Model/Todo"
 import TodoItem from "./TodoItem/TodoItem"
 import { allAction } from "../../Redux/allAction"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { MODAL_TYPE } from "../../Enum/MODAL_TYPE"
 import Modal from "../../Model/Modal"
-import { collection, getDocs } from "firebase/firestore"
-import { db } from "../../Config/Firebase"
+import {
+  addTodoToDatabase,
+  delTodoFromDatabase,
+} from "../../Redux/reducers-actions/TodoActions"
 
 const TodoList: React.FC<{ items: Todo[] }> = (props) => {
-  console.log(props.items)
   const dispatch = useDispatch()
 
   const [newItemName, setNewItemName] = useState<string>("")
 
-  const setIsFinish = (text: string): void => {
+  const userState = useSelector((state: any) => {
+    return state.authReducer.userdata
+  })
+
+  const setIsFinish = (todoID: string): void => {
     dispatch({
       type: allAction.SET_FINISH,
       // item id
-      data: text,
+      data: todoID,
+    })
+  }
+
+  const setTodoColor = (todo: Todo): void => {
+    dispatch({
+      type: allAction.SET_COLOR,
+      data: todo,
     })
   }
 
@@ -31,23 +43,30 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
       Modal: new Modal(MODAL_TYPE.DELETE_TODO, true),
       data: todoID,
     })
+
+    delTodoFromDatabase(userState, todoID)
   }
 
   const onCreate = (text: string): void => {
+    const newTodo = new Todo(text)
+
     dispatch({
       type: allAction.ADD_ITEM,
-      data: new Todo(text),
+      data: newTodo,
     })
+
+    addTodoToDatabase(userState, newTodo)
   }
+
   return (
     <div>
       <ul>
         {props.items.map((e: Todo, index: number) => {
-          console.log(e)
           return (
             <TodoItem
               key={index}
               data={e}
+              user={userState}
               onRemove={onRemove}
               setIsFinish={setIsFinish}
             />

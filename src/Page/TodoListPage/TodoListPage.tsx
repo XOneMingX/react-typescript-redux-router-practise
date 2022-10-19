@@ -21,9 +21,11 @@ const TodoListPage: React.FC = (props) => {
       if (user) {
         dispatch({ type: "LOGIN", userdata: user })
         setTodo(user)
+      } else {
+        dispatch({ type: allAction.SET_ITEM, data: [] })
       }
     })
-  }, [dispatch])
+  }, [auth])
 
   const setTodo = async (userdata: any) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
