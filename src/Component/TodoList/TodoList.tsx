@@ -9,6 +9,7 @@ import Modal from "../../Model/Modal"
 import {
   addTodoToDatabase,
   delTodoFromDatabase,
+  updateTodoDataInDatabase,
 } from "../../Redux/reducers-actions/TodoActions"
 
 const TodoList: React.FC<{ items: Todo[] }> = (props) => {
@@ -28,10 +29,19 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
     })
   }
 
-  const setTodoColor = (todo: Todo): void => {
+  const setTodoColor = (todoID: string, color: string): void => {
     dispatch({
       type: allAction.SET_COLOR,
-      data: todo,
+      data: todoID,
+      color: color,
+    })
+  }
+
+  const setTodoDeadline = (todoID: string, deadline: Date): void => {
+    dispatch({
+      type: allAction.SET_DEADLINE,
+      data: todoID,
+      deadline: deadline,
     })
   }
 
@@ -58,6 +68,10 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
     addTodoToDatabase(userState, newTodo)
   }
 
+  const updateItem = (todo: Todo): void => {
+    updateTodoDataInDatabase(userState, todo)
+  }
+
   return (
     <div>
       <ul>
@@ -66,9 +80,11 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
             <TodoItem
               key={index}
               data={e}
-              user={userState}
               onRemove={onRemove}
               setIsFinish={setIsFinish}
+              setTodoColor={setTodoColor}
+              setTodoDeadline={setTodoDeadline}
+              updateItem={updateItem}
             />
           )
         })}

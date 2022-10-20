@@ -5,14 +5,14 @@ class Todo {
   text: string
   isFinish: boolean
   color: string
-  deadline: Date
+  deadline: Date | null
 
   constructor(todoText: string) {
     this.text = todoText
     this.id = uuidv4()
     this.isFinish = false
     this.color = ""
-    this.deadline = new Date()
+    this.deadline = null
   }
 }
 

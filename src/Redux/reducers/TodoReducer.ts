@@ -5,6 +5,8 @@ import { allAction } from "../allAction"
 interface actionTypes {
   type: string
   data: Todo | string | any
+  color: string
+  deadline: Date
 }
 
 export interface todoInitStateType {
@@ -34,42 +36,66 @@ const deleteItem = (state: Todo[], todoID: Todo | string): Todo[] => {
 
 const setItemFinish = (state: Todo[], todoID: Todo | string): Todo[] => {
   if (typeof todoID === "string") {
-    const newTodo: Todo[] = [...state]
-    const index = newTodo.findIndex((e) => e.id === todoID)
+    const currentTodoList: Todo[] = [...state]
+    const index = currentTodoList.findIndex((e) => e.id === todoID)
     if (index !== -1) {
-      newTodo[index].isFinish = !state[index].isFinish
+      currentTodoList[index].isFinish = !state[index].isFinish
     }
-    return newTodo
+    return currentTodoList
   }
   return state
 }
 
-const setItemColor = (state: Todo[], todo: Todo): Todo[] => {
-  if (typeof todo === "object") {
-    const newTodo: Todo[] = [...state]
-    const index = newTodo.findIndex((e) => e.id === todo.id)
-    if (index !== -1) {
-      newTodo[index].color = todo.color
-    }
-    return newTodo
-  }
-  return state
-}
-
-const updateItem = (state: Todo[], todoID: Todo | string): Todo[] => {
+const setItemColor = (
+  state: Todo[],
+  todoID: Todo | string,
+  color: string
+): Todo[] => {
+  const currentTodoList: Todo[] = [...state]
   if (typeof todoID === "string") {
-    const newTodo: Todo[] = [...state]
-    const index = newTodo.findIndex((e) => e.id === todoID)
-    return newTodo
+    const index = currentTodoList.findIndex((e) => e.id === todoID)
+    if (index !== -1) {
+      currentTodoList[index].color = color
+    }
+    return currentTodoList
   }
   return state
 }
+
+const setItemDeadline = (
+  state: Todo[],
+  todoID: Todo | string,
+  deadline: Date | null
+): Todo[] => {
+  const currentTodoList: Todo[] = [...state]
+  if (typeof todoID === "string") {
+    const index = currentTodoList.findIndex((e) => e.id === todoID)
+    if (index !== -1) {
+      currentTodoList[index].deadline = deadline
+    }
+    return currentTodoList
+  }
+  return state
+}
+
+// const updateItemProp = (state: Todo[], todo: Todo | string): Todo[] => {
+//   const currentTodoList: Todo[] = [...state]
+//
+//   if (todo instanceof Todo) {
+//     const index = currentTodoList.findIndex((e) => e.id === todo.id)
+//     if (index !== -1) {
+//       currentTodoList[index] = todo
+//     }
+//     return currentTodoList
+//   }
+//
+//   return state
+// }
 
 const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
   state = initialState,
   action
 ) => {
-  //console.log(action.data)
   switch (action.type) {
     case allAction.SET_ITEM:
       return {
@@ -95,8 +121,14 @@ const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
     case allAction.SET_COLOR:
       return {
         ...state,
-        allTodo: setItemColor(state.allTodo, action.data),
+        allTodo: setItemColor(state.allTodo, action.data, action.color),
       }
+    case allAction.SET_DEADLINE:
+      return {
+        ...state,
+        allTodo: setItemDeadline(state.allTodo, action.data, action.deadline),
+      }
+
     default:
       return state
   }
