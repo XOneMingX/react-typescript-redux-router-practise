@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react"
 
 import Todo from "../../../Model/Todo"
 
+export function timeStampToString(ts: number) {
+  const date = new Date(ts * 1000)
+  return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
+}
+
 interface propsState {
   data: Todo
   setIsFinish: (id: string) => void
@@ -42,6 +47,20 @@ const TodoItem: React.FC<propsState> = (props) => {
       setIsEdited(true)
     }
   }, [props.data.isFinish, color, deadline])
+
+  useEffect(() => {
+    if (props.data.color !== "") {
+      setColor(props.data.color)
+      setIsInitial(false)
+    }
+    if (props.data.deadline !== null) {
+      console.log(props.data.deadline.toString())
+
+      setIsInitial(false)
+      // const dateData = timeStampToString(props.data.deadline.seconds)
+      // setDeadline(dateData)
+    }
+  }, [])
 
   // useEffect(() => {
   //   props.setTodoColor(props.data.id, color)
