@@ -1,37 +1,44 @@
 import React, { useEffect, useState } from "react"
 
 import Todo from "../../../Model/Todo"
+import { allAction } from "../../../Redux/allAction"
+import { useDispatch } from "react-redux"
 
 export function timeStampToString(ts: number) {
   const date = new Date(ts * 1000)
-  return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
+  if (date.getDate() < 10) {
+    const dateDay = "0" + date.getDate()
+    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + dateDay
+  }
+  return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
 }
 
 interface propsState {
   data: Todo
   setIsFinish: (id: string) => void
   onRemove: (id: string) => void
-  setTodoColor: (id: string, color: string) => void
-  setTodoDeadline: (id: string, deadline: Date) => void
   updateItem: (data: Todo) => void
 }
 
 const TodoItem: React.FC<propsState> = (props) => {
+  const dispatch = useDispatch()
+  let deadline: any
+
   const [isEdited, setIsEdited] = useState(false)
   const [isInitial, setIsInitial] = useState(false)
-  const [deadline, setDeadline] = useState("")
-  const [color, setColor] = useState("")
+
+  const setItemUpdate = (data: {
+    id: string
+    fieldName: string
+    data: any
+  }): void => {
+    dispatch({
+      type: allAction.UPDATE_ITEM,
+      data: data,
+    })
+  }
 
   const saveChangeHandler = () => {
-    if (color !== "") {
-      console.log(color)
-      props.setTodoColor(props.data.id, color)
-    }
-    if (deadline !== "") {
-      console.log(deadline)
-      props.setTodoDeadline(props.data.id, new Date(deadline))
-    }
-
     props.updateItem(props.data)
     setIsEdited(false)
   }
@@ -46,29 +53,20 @@ const TodoItem: React.FC<propsState> = (props) => {
     } else {
       setIsEdited(true)
     }
-  }, [props.data.isFinish, color, deadline])
+  }, [props.data])
 
   useEffect(() => {
-    if (props.data.color !== "") {
-      setColor(props.data.color)
-      setIsInitial(false)
+    if (typeof props.data.deadline === "string") {
+      console.log("1")
+      deadline = props.data.deadline
+    } else {
+      console.log("2")
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      deadline = timeStampToString(props.data.deadline.seconds)
+      console.log(deadline)
     }
-    if (props.data.deadline !== null) {
-      console.log(props.data.deadline.toString())
-
-      setIsInitial(false)
-      // const dateData = timeStampToString(props.data.deadline.seconds)
-      // setDeadline(dateData)
-    }
-  }, [])
-
-  // useEffect(() => {
-  //   props.setTodoColor(props.data.id, color)
-  // }, [color])
-  //
-  // useEffect(() => {
-  //   props.setTodoDeadline(props.data.id, new Date(deadline))
-  // }, [deadline])
+  }, [props.data.deadline])
 
   return (
     <li
@@ -76,7 +74,7 @@ const TodoItem: React.FC<propsState> = (props) => {
       style={{
         display: "grid",
         gridTemplateColumns: "auto 300px 30px 60px 30px",
-        backgroundColor: color,
+        backgroundColor: props.data.color,
       }}>
       <div
         style={
@@ -91,15 +89,27 @@ const TodoItem: React.FC<propsState> = (props) => {
         <input
           type="color"
           id="color"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
+          value={props.data.color}
+          onChange={(e) => {
+            setItemUpdate({
+              id: props.data.id,
+              fieldName: "color",
+              data: e.target.value,
+            })
+          }}
         />
         <label htmlFor="deadline">Deadline:</label>
         <input
           type="date"
           id="deadline"
           value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
+          onChange={(e) => {
+            setItemUpdate({
+              id: props.data.id,
+              fieldName: "deadline",
+              data: new Date(e.target.value),
+            })
+          }}
         />
       </div>
 

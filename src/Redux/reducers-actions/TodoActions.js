@@ -63,6 +63,7 @@ export const delTodoFromDatabase = async (userData, todoID) => {
 }
 
 export const updateTodoDataInDatabase = async (userData, todoData) => {
+  console.log(todoData)
   const todoRef = doc(db, "Users", userData.uid, "TodoList", todoData.id)
   await updateDoc(todoRef, { ...todoData })
 }

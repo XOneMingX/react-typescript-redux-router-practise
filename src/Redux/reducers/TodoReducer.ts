@@ -5,8 +5,6 @@ import { allAction } from "../allAction"
 interface actionTypes {
   type: string
   data: Todo | string | any
-  color: string
-  deadline: Date
 }
 
 export interface todoInitStateType {
@@ -46,36 +44,22 @@ const setItemFinish = (state: Todo[], todoID: Todo | string): Todo[] => {
   return state
 }
 
-const setItemColor = (
+const setItemUpdate = (
   state: Todo[],
-  todoID: Todo | string,
-  color: string
+  data: { id: string; fieldName: string; data: any }
 ): Todo[] => {
+  console.log(data)
   const currentTodoList: Todo[] = [...state]
-  if (typeof todoID === "string") {
-    const index = currentTodoList.findIndex((e) => e.id === todoID)
-    if (index !== -1) {
-      currentTodoList[index].color = color
-    }
-    return currentTodoList
-  }
-  return state
-}
+  const index = currentTodoList.findIndex((e) => e.id === data.id)
 
-const setItemDeadline = (
-  state: Todo[],
-  todoID: Todo | string,
-  deadline: Date | null
-): Todo[] => {
-  const currentTodoList: Todo[] = [...state]
-  if (typeof todoID === "string") {
-    const index = currentTodoList.findIndex((e) => e.id === todoID)
-    if (index !== -1) {
-      currentTodoList[index].deadline = deadline
-    }
-    return currentTodoList
+  currentTodoList[index] = {
+    ...currentTodoList[index],
+    [data.fieldName]: data.data,
   }
-  return state
+
+  console.log(currentTodoList[index])
+
+  return currentTodoList
 }
 
 // const updateItemProp = (state: Todo[], todo: Todo | string): Todo[] => {
@@ -118,15 +102,11 @@ const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
         ...state,
         allTodo: setItemFinish(state.allTodo, action.data),
       }
-    case allAction.SET_COLOR:
+
+    case allAction.UPDATE_ITEM:
       return {
         ...state,
-        allTodo: setItemColor(state.allTodo, action.data, action.color),
-      }
-    case allAction.SET_DEADLINE:
-      return {
-        ...state,
-        allTodo: setItemDeadline(state.allTodo, action.data, action.deadline),
+        allTodo: setItemUpdate(state.allTodo, action.data),
       }
 
     default:

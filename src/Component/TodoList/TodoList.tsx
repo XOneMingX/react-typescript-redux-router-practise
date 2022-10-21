@@ -29,22 +29,6 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
     })
   }
 
-  const setTodoColor = (todoID: string, color: string): void => {
-    dispatch({
-      type: allAction.SET_COLOR,
-      data: todoID,
-      color: color,
-    })
-  }
-
-  const setTodoDeadline = (todoID: string, deadline: Date): void => {
-    dispatch({
-      type: allAction.SET_DEADLINE,
-      data: todoID,
-      deadline: deadline,
-    })
-  }
-
   const onRemove = (todoID: string): void => {
     console.log(todoID)
 
@@ -82,8 +66,6 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
               data={e}
               onRemove={onRemove}
               setIsFinish={setIsFinish}
-              setTodoColor={setTodoColor}
-              setTodoDeadline={setTodoDeadline}
               updateItem={updateItem}
             />
           )
