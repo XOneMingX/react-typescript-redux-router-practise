@@ -41,8 +41,8 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
     delTodoFromDatabase(userState, todoID)
   }
 
-  const onCreate = (text: string): void => {
-    const newTodo = new Todo(text)
+  const onCreate = (text: string, userID: string): void => {
+    const newTodo = new Todo(text, userID)
 
     dispatch({
       type: allAction.ADD_ITEM,
@@ -90,7 +90,7 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
           borderRadius: "0.75em",
         }}
         onClick={() => {
-          onCreate(newItemName)
+          onCreate(newItemName, userState.uid)
           // reset item name
           setNewItemName("")
         }}>

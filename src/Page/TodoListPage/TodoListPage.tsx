@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { withRouter } from "react-router-dom"
 import TodoList from "../../Component/TodoList/TodoList"
@@ -9,12 +9,19 @@ import { auth } from "../../Config/Firebase"
 import { todoDataHandler } from "../../Redux/reducers-actions/TodoActions"
 import { allAction } from "../../Redux/allAction"
 import Todo from "../../Model/Todo"
+import classes from "./TodoListPage.module.css"
+import Folder from "../../Model/Folder"
 
 const TodoListPage: React.FC = (props) => {
   const dispatch = useDispatch()
   const todos = useSelector((state: ApplicationState) => {
     return state.todoReducer.allTodo
   })
+  const userState = useSelector((state: any) => {
+    return state.authReducer.userdata
+  })
+
+  const [folderName, setFolderName] = useState<string>("")
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -37,10 +44,37 @@ const TodoListPage: React.FC = (props) => {
     })
   }
 
+  const createFolder = (name: string, userID: string): void => {
+    const newFolder = new Folder(name, userID)
+  }
+
   if (Array.isArray(todos)) {
     return (
       <div>
-        <TodoList items={todos} />
+        <div>
+          <TodoList items={todos} />
+        </div>
+        <div>
+          <input
+            style={{
+              padding: "2px",
+              borderRadius: "0.75em",
+              backgroundColor: "lightgray",
+              margin: "4px 0",
+            }}
+            value={folderName}
+            onChange={(e) => setFolderName(e.target.value)}
+          />
+          <button
+            type="button"
+            className={classes.button}
+            onClick={() => {
+              createFolder(folderName, userState.uid)
+              setFolderName("")
+            }}>
+            + Add Folder
+          </button>
+        </div>
       </div>
     )
   }

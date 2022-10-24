@@ -22,10 +22,10 @@ interface propsState {
 
 const TodoItem: React.FC<propsState> = (props) => {
   const dispatch = useDispatch()
-  let deadline: any
 
   const [isEdited, setIsEdited] = useState(false)
   const [isInitial, setIsInitial] = useState(false)
+  const [deadline, setDeadline] = useState()
 
   const setItemUpdate = (data: {
     id: string
@@ -58,13 +58,12 @@ const TodoItem: React.FC<propsState> = (props) => {
   useEffect(() => {
     if (typeof props.data.deadline === "string") {
       console.log("1")
-      deadline = props.data.deadline
+      setDeadline(props.data.deadline)
     } else {
       console.log("2")
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      deadline = timeStampToString(props.data.deadline.seconds)
-      console.log(deadline)
+      setDeadline(timeStampToString(props.data.deadline.seconds))
     }
   }, [props.data.deadline])
 
