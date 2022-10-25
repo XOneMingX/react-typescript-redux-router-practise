@@ -1,25 +1,49 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
 
 import Todo from "../../Model/Todo"
 import TodoItem from "./TodoItem/TodoItem"
 import { allAction } from "../../Redux/allAction"
-import { useDispatch, useSelector } from "react-redux"
 import { MODAL_TYPE } from "../../Enum/MODAL_TYPE"
 import Modal from "../../Model/Modal"
 import {
   addTodoToDatabase,
   delTodoFromDatabase,
+  todoDataHandler,
   updateTodoDataInDatabase,
 } from "../../Redux/reducers-actions/TodoActions"
+import { auth } from "../../Config/Firebase"
 
 const TodoList: React.FC<{ items: Todo[] }> = (props) => {
   const dispatch = useDispatch()
+  const params = useParams()
 
   const [newItemName, setNewItemName] = useState<string>("")
 
   const userState = useSelector((state: any) => {
     return state.authReducer.userdata
   })
+
+  useEffect(() => {
+    console.log(auth.currentUser)
+    if (params.folderID !== undefined) {
+      setFolderTodo(
+        userState ? userState.uid : auth.currentUser?.uid,
+        params.folderID
+      )
+    } else {
+      setFolderTodo(userState ? userState.uid : auth.currentUser?.uid, "")
+    }
+  }, [params])
+
+  const setFolderTodo = async (userID: string, folderID: string) => {
+    const todoData: Todo[] = await todoDataHandler(userID, folderID)
+    dispatch({
+      type: allAction.SET_ITEM,
+      data: todoData as Todo[],
+    })
+  }
 
   const setIsFinish = (todoID: string): void => {
     dispatch({
@@ -38,22 +62,22 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
       data: todoID,
     })
 
-    delTodoFromDatabase(userState, todoID)
+    delTodoFromDatabase(todoID)
   }
 
-  const onCreate = (text: string, userID: string): void => {
-    const newTodo = new Todo(text, userID)
+  const onCreate = (text: string, userID: string, folderID: string): void => {
+    const newTodo = new Todo(text, userID, folderID)
 
     dispatch({
       type: allAction.ADD_ITEM,
       data: newTodo,
     })
 
-    addTodoToDatabase(userState, newTodo)
+    addTodoToDatabase(newTodo)
   }
 
   const updateItem = (todo: Todo): void => {
-    updateTodoDataInDatabase(userState, todo)
+    updateTodoDataInDatabase(todo)
   }
 
   return (
@@ -90,7 +114,11 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
           borderRadius: "0.75em",
         }}
         onClick={() => {
-          onCreate(newItemName, userState.uid)
+          onCreate(
+            newItemName,
+            userState.uid,
+            params.folderID ? params.folderID : ""
+          )
           // reset item name
           setNewItemName("")
         }}>

@@ -9,14 +9,14 @@ class Todo {
   createUserID: string
   folderID: string
 
-  constructor(todoText: string, userID: string) {
+  constructor(todoText: string, userID: string, folderID: string | "") {
     this.text = todoText
     this.id = uuidv4()
     this.isFinish = false
     this.color = ""
     this.deadline = new Date()
     this.createUserID = userID
-    this.folderID = ""
+    this.folderID = folderID
   }
 }
 

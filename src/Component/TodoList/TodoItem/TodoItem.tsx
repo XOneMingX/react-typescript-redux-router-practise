@@ -3,9 +3,31 @@ import React, { useEffect, useState } from "react"
 import Todo from "../../../Model/Todo"
 import { allAction } from "../../../Redux/allAction"
 import { useDispatch } from "react-redux"
+import { useHistory } from "react-router-dom"
 
 export function timeStampToString(ts: number) {
-  const date = new Date(ts * 1000)
+  const timeStamp = new Date(ts * 1000)
+  if (timeStamp.getDate() < 10) {
+    const timeStampDay = "0" + timeStamp.getDate()
+    return (
+      timeStamp.getFullYear() +
+      "-" +
+      (timeStamp.getMonth() + 1) +
+      "-" +
+      timeStampDay
+    )
+  }
+  return (
+    timeStamp.getFullYear() +
+    "-" +
+    (timeStamp.getMonth() + 1) +
+    "-" +
+    timeStamp.getDate()
+  )
+}
+
+function dateTypeToString(date: Date) {
+  date = new Date(date)
   if (date.getDate() < 10) {
     const dateDay = "0" + date.getDate()
     return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + dateDay
@@ -22,10 +44,12 @@ interface propsState {
 
 const TodoItem: React.FC<propsState> = (props) => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const [isEdited, setIsEdited] = useState(false)
   const [isInitial, setIsInitial] = useState(false)
-  const [deadline, setDeadline] = useState()
+
+  const [deadline, setDeadline] = useState("")
 
   const setItemUpdate = (data: {
     id: string
@@ -50,22 +74,39 @@ const TodoItem: React.FC<propsState> = (props) => {
   useEffect(() => {
     if (!isInitial) {
       setIsInitial(true)
-    } else {
-      setIsEdited(true)
-    }
-  }, [props.data])
-
-  useEffect(() => {
-    if (typeof props.data.deadline === "string") {
-      console.log("1")
-      setDeadline(props.data.deadline)
-    } else {
-      console.log("2")
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       setDeadline(timeStampToString(props.data.deadline.seconds))
+    } else {
+      console.log("edit")
+      setIsEdited(true)
     }
-  }, [props.data.deadline])
+  }, [props.data, props.data.isFinish])
+
+  useEffect(() => {
+    convertDate()
+    return history.listen(() => {
+      console.log("history")
+      //convertDate()
+      setIsInitial(false)
+    })
+  }, [history, props.data.deadline])
+
+  const convertDate = () => {
+    if (isInitial) {
+      if (typeof props.data.deadline === "string") {
+        setDeadline(props.data.deadline)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+      } else if (typeof props.data.deadline.seconds === "number") {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setDeadline(timeStampToString(props.data.deadline.seconds))
+      } else {
+        setDeadline(dateTypeToString(props.data.deadline))
+      }
+    }
+  }
 
   return (
     <li

@@ -5,6 +5,7 @@ export const allAction = {
   SET_FINISH: "SET_FINISH",
   UPDATE_ITEM: "UPDATE_ITEM",
 
+  SET_FOLDER: "SET_FOLDER",
   ADD_FOLDER: "ADD_FOLDER",
   DEL_FOLDER: "DEL_FOLDER",
 

@@ -7,6 +7,9 @@ const RouterManager = () => {
   return (
     <div>
       <Switch>
+        <Route path="/folder/:folderID">
+          <TodoList />
+        </Route>
         <Route path="/todolist/:uid">
           <TodoList />
         </Route>

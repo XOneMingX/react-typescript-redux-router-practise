@@ -16,6 +16,7 @@ const initialState: todoInitStateType = {
 }
 
 const addItem = (state: Todo[], todo: Todo | string): Todo[] => {
+  console.log(todo)
   const newTodo: Todo[] = [...state]
   // error handle
   if (todo instanceof Todo) {
@@ -48,7 +49,6 @@ const setItemUpdate = (
   state: Todo[],
   data: { id: string; fieldName: string; data: any }
 ): Todo[] => {
-  console.log(data)
   const currentTodoList: Todo[] = [...state]
   const index = currentTodoList.findIndex((e) => e.id === data.id)
 
@@ -56,25 +56,8 @@ const setItemUpdate = (
     ...currentTodoList[index],
     [data.fieldName]: data.data,
   }
-
-  console.log(currentTodoList[index])
-
   return currentTodoList
 }
-
-// const updateItemProp = (state: Todo[], todo: Todo | string): Todo[] => {
-//   const currentTodoList: Todo[] = [...state]
-//
-//   if (todo instanceof Todo) {
-//     const index = currentTodoList.findIndex((e) => e.id === todo.id)
-//     if (index !== -1) {
-//       currentTodoList[index] = todo
-//     }
-//     return currentTodoList
-//   }
-//
-//   return state
-// }
 
 const TodoReducer: Reducer<todoInitStateType, actionTypes> = (
   state = initialState,

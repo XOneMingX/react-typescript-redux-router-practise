@@ -22,12 +22,16 @@ const delFolder = (state, folderID) => {
 
 const FolderReducer = (state = folderInitialState, action) => {
   switch (action.type) {
+    case allAction.SET_FOLDER:
+      return {
+        ...state,
+        allFolders: action.data,
+      }
     case allAction.ADD_FOLDER:
       return {
         ...state,
         allFolders: addFolder(state.allFolders, action.data),
       }
-
     case allAction.DEL_FOLDER:
       return {
         ...state,
