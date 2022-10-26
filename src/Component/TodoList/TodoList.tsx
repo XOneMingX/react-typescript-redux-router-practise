@@ -20,22 +20,34 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
   const params = useParams()
 
   const [newItemName, setNewItemName] = useState<string>("")
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const userState = useSelector((state: any) => {
     return state.authReducer.userdata
   })
 
   useEffect(() => {
-    console.log(auth.currentUser)
-    if (params.folderID !== undefined) {
-      setFolderTodo(
-        userState ? userState.uid : auth.currentUser?.uid,
-        params.folderID
-      )
-    } else {
-      setFolderTodo(userState ? userState.uid : auth.currentUser?.uid, "")
+    if (userState !== undefined) {
+      if (Object.keys(userState).length !== 0) {
+        setIsLoaded(true)
+      } else {
+        setIsLoaded(false)
+      }
     }
-  }, [params])
+  }, [userState])
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (params.folderID !== undefined) {
+        setFolderTodo(
+          userState ? userState.uid : auth.currentUser?.uid,
+          params.folderID
+        )
+      } else {
+        setFolderTodo(userState ? userState.uid : auth.currentUser?.uid, "")
+      }
+    }
+  }, [params, isLoaded])
 
   const setFolderTodo = async (userID: string, folderID: string) => {
     const todoData: Todo[] = await todoDataHandler(userID, folderID)

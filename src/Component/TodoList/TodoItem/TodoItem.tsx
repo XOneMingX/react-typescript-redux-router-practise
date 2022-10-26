@@ -78,7 +78,7 @@ const TodoItem: React.FC<propsState> = (props) => {
       // @ts-ignore
       setDeadline(timeStampToString(props.data.deadline.seconds))
     } else {
-      console.log("edit")
+      //console.log("edit")
       setIsEdited(true)
     }
   }, [props.data, props.data.isFinish])
@@ -86,7 +86,7 @@ const TodoItem: React.FC<propsState> = (props) => {
   useEffect(() => {
     convertDate()
     return history.listen(() => {
-      console.log("history")
+      // console.log("history")
       //convertDate()
       setIsInitial(false)
     })

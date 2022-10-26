@@ -28,7 +28,8 @@ const TodoListPage: React.FC = (props) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch({ type: "LOGIN", userdata: user })
-        setInitialComponents(user)
+        newUserHandler(user)
+        //setInitialComponents(user)
       } else {
         dispatch({ type: allAction.SET_FOLDER, data: [] })
         dispatch({ type: allAction.SET_ITEM, data: [] })
@@ -36,17 +37,18 @@ const TodoListPage: React.FC = (props) => {
     })
   }, [auth])
 
-  const setInitialComponents = async (userData: any) => {
-    await newUserHandler(userData)
-    const folderData: Folder[] = await folderDataHandler(userData.uid)
-    dispatch({ type: allAction.SET_FOLDER, data: folderData as Folder[] })
-
-    const todoData: Todo[] = await todoDataHandler(userData.uid)
-    dispatch({
-      type: allAction.SET_ITEM,
-      data: todoData as Todo[],
-    })
-  }
+  // const setInitialComponents = async (userData: any) => {
+  //   console.log(userData)
+  //   await newUserHandler(userData)
+  //   const folderData: Folder[] = await folderDataHandler(userData.uid)
+  //   dispatch({ type: allAction.SET_FOLDER, data: folderData as Folder[] })
+  //
+  //   const todoData: Todo[] = await todoDataHandler(userData.uid)
+  //   dispatch({
+  //     type: allAction.SET_ITEM,
+  //     data: todoData as Todo[],
+  //   })
+  // }
 
   if (Array.isArray(todos)) {
     return (

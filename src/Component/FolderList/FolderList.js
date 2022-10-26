@@ -10,8 +10,8 @@ import {
   delFolderFromDatabase,
 } from "../../Redux/reducers-actions/FolderAction"
 import classes from "./FolderList.module.css"
-import Todo from "../../Model/Todo"
 import { folderDataHandler } from "../../Redux/reducers-actions/FolderAction"
+import { auth } from "../../Config/Firebase"
 
 const FolderList = (props) => {
   const dispatch = useDispatch()
@@ -22,14 +22,30 @@ const FolderList = (props) => {
   })
 
   const [folderName, setFolderName] = useState("")
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    if (params.folderID !== undefined) {
-      setFolder(userState.uid, params.folderID)
-    } else {
-      setFolder(userState.uid, "")
+    if (userState !== undefined) {
+      if (Object.keys(userState).length !== 0) {
+        setIsLoaded(true)
+      } else {
+        setIsLoaded(false)
+      }
     }
-  }, [params])
+  }, [userState])
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (params.folderID !== undefined) {
+        setFolder(
+          userState ? userState.uid : auth.currentUser?.uid,
+          params.folderID
+        )
+      } else {
+        setFolder(userState ? userState.uid : auth.currentUser?.uid, "")
+      }
+    }
+  }, [params, isLoaded])
 
   const setFolder = async (userID, folderID) => {
     const folderData = await folderDataHandler(userID, folderID)
