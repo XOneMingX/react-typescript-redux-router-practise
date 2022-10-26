@@ -7,32 +7,38 @@ import { useHistory } from "react-router-dom"
 
 export function timeStampToString(ts: number) {
   const timeStamp = new Date(ts * 1000)
-  if (timeStamp.getDate() < 10) {
-    const timeStampDay = "0" + timeStamp.getDate()
-    return (
-      timeStamp.getFullYear() +
-      "-" +
-      (timeStamp.getMonth() + 1) +
-      "-" +
-      timeStampDay
-    )
+  let timeStampMonth
+  let timeStampDay
+  if (timeStamp.getMonth() + 1 < 10) {
+    timeStampMonth = (timeStamp.getMonth() + 1).toString().padStart(2, "0")
+  } else {
+    timeStampMonth = timeStamp.getMonth() + 1
   }
-  return (
-    timeStamp.getFullYear() +
-    "-" +
-    (timeStamp.getMonth() + 1) +
-    "-" +
-    timeStamp.getDate()
-  )
+  if (timeStamp.getDate() < 10) {
+    timeStampDay = ("0" + timeStamp.getDate()).slice(-2)
+  } else {
+    timeStampDay = timeStamp.getDate()
+  }
+
+  return timeStamp.getFullYear() + "-" + timeStampMonth + "-" + timeStampDay
 }
 
 function dateTypeToString(date: Date) {
   date = new Date(date)
-  if (date.getDate() < 10) {
-    const dateDay = "0" + date.getDate()
-    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + dateDay
+  let dateMonth
+  let dateDay
+  if (date.getMonth() + 1 < 10) {
+    dateMonth = (date.getMonth() + 1).toString().padStart(2, "0")
+  } else {
+    dateMonth = date.getMonth() + 1
   }
-  return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+  if (date.getDate() < 10) {
+    dateDay = ("0" + date.getDate()).slice(-2)
+  } else {
+    dateDay = date.getDate()
+  }
+
+  return date.getFullYear() + "-" + dateMonth + "-" + dateDay
 }
 
 interface propsState {
@@ -88,6 +94,7 @@ const TodoItem: React.FC<propsState> = (props) => {
     return history.listen(() => {
       // console.log("history")
       //convertDate()
+      setIsEdited(false)
       setIsInitial(false)
     })
   }, [history, props.data.deadline])

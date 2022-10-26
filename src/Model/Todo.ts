@@ -8,6 +8,7 @@ class Todo {
   deadline: Date
   createUserID: string
   folderID: string
+  parentFolderID: [string | ""]
 
   constructor(todoText: string, userID: string, folderID: string | "") {
     this.text = todoText
@@ -17,6 +18,7 @@ class Todo {
     this.deadline = new Date()
     this.createUserID = userID
     this.folderID = folderID
+    this.parentFolderID = [folderID]
   }
 }
 
