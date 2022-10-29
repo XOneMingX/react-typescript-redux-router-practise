@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./src/**/*.{html,js}",
@@ -34,5 +35,6 @@ module.exports = {
       },
     },
   },
+  // eslint-disable-next-line global-require
   plugins: [require("daisyui")],
 }
