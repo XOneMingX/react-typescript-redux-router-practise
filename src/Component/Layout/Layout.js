@@ -4,7 +4,9 @@ import MainHeader from "./MainHeader/MainHeader"
 const Layout = (props) => {
   return (
     <React.Fragment>
-      <MainHeader />
+      <div>
+        <MainHeader />
+      </div>
       <main>{props.children}</main>
     </React.Fragment>
   )

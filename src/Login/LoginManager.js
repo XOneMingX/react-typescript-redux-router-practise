@@ -2,8 +2,8 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
 import { useHistory } from "react-router-dom"
-import classes from "./LoginManager.module.css"
 import { auth } from "../Config/Firebase"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const LoginManager = () => {
   const authDispatch = useDispatch()
@@ -32,17 +32,20 @@ const LoginManager = () => {
 
   if (!isLoginState) {
     return (
-      <button className={classes.button} onClick={loginHandler}>
-        Login
-      </button>
+      <div className=" box-content w-fit rounded-md bg-yellow-300 shadow active:bg-yellow-100">
+        <i className="fa-solid fa-right-to-bracket pl-1.5"></i>
+        <button
+          onClick={loginHandler}
+          className="font-xl p-2 text-center font-semibold">
+          Login
+        </button>
+      </div>
     )
   }
   return (
     <div>
-      <p className={classes.username}>Hi!{userState.displayName}</p>
-      <button className={classes.button} onClick={logoutHandler}>
-        Logout
-      </button>
+      <p>Hi!{userState.displayName}</p>
+      <button onClick={logoutHandler}>Logout</button>
     </div>
   )
 }

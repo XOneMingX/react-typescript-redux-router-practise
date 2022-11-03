@@ -5,7 +5,7 @@ import MainPage from "./Page/MainPage/MainPage"
 
 const RouterManager = () => {
   return (
-    <div>
+    <div className="mt-24">
       <Switch>
         <Route path="/folder/:folderID">
           <TodoList />
