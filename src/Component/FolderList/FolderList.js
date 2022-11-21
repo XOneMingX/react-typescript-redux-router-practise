@@ -25,7 +25,7 @@ const FolderList = (props) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    if (userState !== undefined) {
+    if (userState && userState !== undefined) {
       if (Object.keys(userState).length !== 0) {
         setIsLoaded(true)
       } else {

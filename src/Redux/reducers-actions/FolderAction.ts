@@ -15,7 +15,7 @@ import { db } from "../../Config/Firebase"
 const folderDatabase = collection(db, "Folder")
 const todoDatabase = collection(db, "TodoList")
 
-export const folderDataHandler = async (userID, folderID) => {
+export const folderDataHandler = async (userID: string, folderID: string) => {
   const folderDocs = await getDocs(
     query(
       folderDatabase,
@@ -24,7 +24,7 @@ export const folderDataHandler = async (userID, folderID) => {
     )
   )
 
-  let foldersData = []
+  let foldersData: any = []
   if (!foldersData.empty) {
     foldersData = folderDocs.docs.map((doc) => {
       return doc.data()
@@ -33,13 +33,13 @@ export const folderDataHandler = async (userID, folderID) => {
   return foldersData
 }
 
-export const addFolderToDatabase = async (folderData) => {
+export const addFolderToDatabase = async (folderData: any) => {
   await setDoc(doc(db, "Folder", folderData.id), {
     ...folderData,
   })
 }
 
-export const delFolderFromDatabase = async (folderID) => {
+export const delFolderFromDatabase = async (folderID: string) => {
   const todoList = await getDocs(
     query(todoDatabase, where("folderID", "==", folderID))
   )

@@ -6,15 +6,11 @@ import { onAuthStateChanged } from "firebase/auth"
 import TodoList from "../../Component/TodoList/TodoList"
 import { ApplicationState } from "../../Redux/reducers/rootReducer"
 import { auth } from "../../Config/Firebase"
-import { todoDataHandler } from "../../Redux/reducers-actions/TodoActions"
 import { allAction } from "../../Redux/allAction"
-import Todo from "../../Model/Todo"
 import FolderList from "../../Component/FolderList/FolderList"
 import { newUserHandler } from "../../Redux/reducers-actions/AuthAction"
-import Folder from "../../Model/Folder"
-import { folderDataHandler } from "../../Redux/reducers-actions/FolderAction"
 
-const TodoListPage: React.FC = (props) => {
+const TodoListPage: React.FC = () => {
   const dispatch = useDispatch()
 
   const todos = useSelector((state: ApplicationState) => {

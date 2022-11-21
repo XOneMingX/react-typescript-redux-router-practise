@@ -9,14 +9,12 @@ import Layout from "./Component/Layout/Layout"
 function App() {
   return (
     <Provider store={store}>
-      <div>
-        <BrowserRouter>
-          <Layout>
-            <ModalProvider />
-            <RouterManager />
-          </Layout>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter>
+        <Layout>
+          <ModalProvider />
+          <RouterManager />
+        </Layout>
+      </BrowserRouter>
     </Provider>
   )
 }

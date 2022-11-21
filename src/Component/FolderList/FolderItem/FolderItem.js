@@ -9,8 +9,11 @@ const FolderItem = (props) => {
         display: "grid",
         gridTemplateColumns: "auto 40px",
       }}>
-      <div>
-        <Link to={"/folder/" + props.data.id}>{props.data.name}</Link>
+      <div className="flex items-center gap-2">
+        <i className="fa-solid fa-folder fa-xl"></i>
+        <Link to={"/folder/" + props.data.id} className="text-2xl">
+          {props.data.name}
+        </Link>
       </div>
       <div>
         <button onClick={() => props.onRemoveFolder(props.data.id)}>X</button>

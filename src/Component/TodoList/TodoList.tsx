@@ -14,6 +14,7 @@ import {
   updateTodoDataInDatabase,
 } from "../../Redux/reducers-actions/TodoActions"
 import { auth } from "../../Config/Firebase"
+import { ApplicationState } from "../../Redux/reducers/rootReducer"
 
 const TodoList: React.FC<{ items: Todo[] }> = (props) => {
   const dispatch = useDispatch()
@@ -22,12 +23,12 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
   const [newItemName, setNewItemName] = useState<string>("")
   const [isLoaded, setIsLoaded] = useState(false)
 
-  const userState = useSelector((state: any) => {
+  const userState = useSelector((state: ApplicationState) => {
     return state.authReducer.userdata
-  })
+  })!
 
   useEffect(() => {
-    if (userState !== undefined) {
+    if (userState && userState !== undefined) {
       if (Object.keys(userState).length !== 0) {
         setIsLoaded(true)
       } else {
@@ -38,13 +39,10 @@ const TodoList: React.FC<{ items: Todo[] }> = (props) => {
 
   useEffect(() => {
     if (isLoaded) {
-      if (params.folderID !== undefined) {
-        setFolderTodo(
-          userState ? userState.uid : auth.currentUser?.uid,
-          params.folderID
-        )
+      if (userState.uid !== undefined && params.folderID !== undefined) {
+        setFolderTodo(userState.uid, params.folderID)
       } else {
-        setFolderTodo(userState ? userState.uid : auth.currentUser?.uid, "")
+        setFolderTodo(userState.uid, "")
       }
     }
   }, [params, isLoaded])

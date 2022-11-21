@@ -4,7 +4,19 @@
 @tailwind utilities;
 
 html {
+    height:100%;
+    width:100%;
     font-size: 62.5%;
     scoll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
+}
+
+body{
+    height:inherit;
+    width:inherit;
+}
+
+#root{
+    height:inherit;
+    width:inherit;
 }

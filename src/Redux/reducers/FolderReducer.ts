@@ -1,26 +1,40 @@
 import { allAction } from "../allAction"
+import Folder from "../../Model/Folder"
+import { Reducer } from "react"
 
-const folderInitialState = { allFolders: [] }
+interface actionTypes {
+  type: string
+  data: Folder | string | any
+}
 
-const addFolder = (state, folderID) => {
+export interface folderInitStateType {
+  allFolders: Folder[]
+}
+
+const folderInitialState: folderInitStateType = { allFolders: [] }
+
+const addFolder = (state: Folder[], folder: Folder | string) => {
   const newFolder = [...state]
   console.log(newFolder)
   // error handle
-  if (!newFolder.includes(folderID)) {
-    newFolder.push(folderID)
+  if (folder instanceof Folder) {
+    newFolder.push(folder)
   }
 
   return newFolder
 }
 
-const delFolder = (state, folderID) => {
+const delFolder = (state: Folder[], folderID: Folder | string) => {
   if (typeof folderID === "string") {
     return state.filter((e) => e.id !== folderID)
   }
   return state
 }
 
-const FolderReducer = (state = folderInitialState, action) => {
+const FolderReducer: Reducer<folderInitStateType, actionTypes> = (
+  state = folderInitialState,
+  action
+) => {
   switch (action.type) {
     case allAction.SET_FOLDER:
       return {

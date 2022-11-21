@@ -32,7 +32,7 @@ const DeleteTodoModal: React.FC = (props: any) => {
         <div className="modal-box">
           <div>
             Are you sure you want to remove
-            <div className="py-1 px-2 border-gray-200 border rounded-lg my-2">
+            <div className="my-2 rounded-lg border border-gray-200 py-1 px-2">
               {"#" + ModalData}
             </div>
           </div>

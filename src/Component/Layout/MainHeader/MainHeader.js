@@ -9,7 +9,7 @@ const MainHeader = (props) => {
   })
 
   return (
-    <header className="fixed top-0 z-10 flex w-screen items-center justify-between border bg-blue-100 p-5">
+    <header className="fixed top-0 z-10 flex w-full items-center justify-between border-none bg-blue-100 p-2 shadow-md">
       <div>
         <Link
           to={
