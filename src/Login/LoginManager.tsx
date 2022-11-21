@@ -4,12 +4,17 @@ import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
 import { useHistory } from "react-router-dom"
 import { auth } from "../Config/Firebase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { ApplicationState } from "../Redux/reducers/rootReducer"
 
 const LoginManager = () => {
   const authDispatch = useDispatch()
-  const isLoginState = useSelector((state) => state.authReducer.isLogin)
-  const userState = useSelector((state) => state.authReducer.userdata)
-  let history = useHistory()
+  const isLoginState = useSelector(
+    (state: ApplicationState) => state.authReducer.isLogin
+  )
+  const userState = useSelector(
+    (state: ApplicationState) => state.authReducer.userdata
+  )!
+  const history = useHistory()
 
   const logoutHandler = () => {
     signOut(auth).then(() => {
@@ -59,7 +64,7 @@ const LoginManager = () => {
         {userState.displayName}
       </button>
       <ul
-        tabIndex="0"
+        tabIndex={0}
         className="dropdown-content menu rounded-box w-[250px] bg-base-100 p-3 text-2xl shadow max-sm:w-[200px] max-sm:text-lg">
         <li>
           <a>Member Info</a>

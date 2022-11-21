@@ -9,17 +9,16 @@ import {
   addFolderToDatabase,
   delFolderFromDatabase,
 } from "../../Redux/reducers-actions/FolderAction"
-import classes from "./FolderList.module.css"
 import { folderDataHandler } from "../../Redux/reducers-actions/FolderAction"
-import { auth } from "../../Config/Firebase"
+import { ApplicationState } from "../../Redux/reducers/rootReducer"
 
-const FolderList = (props) => {
+const FolderList: React.FC<{ folders: Folder[] }> = (props) => {
   const dispatch = useDispatch()
   const params = useParams()
 
-  const userState = useSelector((state) => {
+  const userState = useSelector((state: ApplicationState) => {
     return state.authReducer.userdata
-  })
+  })!
 
   const [folderName, setFolderName] = useState("")
   const [isLoaded, setIsLoaded] = useState(false)
@@ -36,18 +35,15 @@ const FolderList = (props) => {
 
   useEffect(() => {
     if (isLoaded) {
-      if (params.folderID !== undefined) {
-        setFolder(
-          userState ? userState.uid : auth.currentUser?.uid,
-          params.folderID
-        )
+      if (userState.uid && params.folderID !== undefined) {
+        setFolder(userState.uid, params.folderID)
       } else {
-        setFolder(userState ? userState.uid : auth.currentUser?.uid, "")
+        setFolder(userState.uid, "")
       }
     }
   }, [params, isLoaded])
 
-  const setFolder = async (userID, folderID) => {
+  const setFolder = async (userID: string, folderID: string) => {
     const folderData = await folderDataHandler(userID, folderID)
     dispatch({
       type: allAction.SET_FOLDER,
@@ -55,7 +51,7 @@ const FolderList = (props) => {
     })
   }
 
-  const createFolder = (name, userID, folderID) => {
+  const createFolder = (name: string, userID: string, folderID: string) => {
     if (name.trim().length !== 0) {
       const newFolder = new Folder(name, userID, folderID)
 
@@ -67,7 +63,7 @@ const FolderList = (props) => {
     }
   }
 
-  const onRemoveFolder = (folderID) => {
+  const onRemoveFolder = (folderID: string) => {
     dispatch({
       type: allAction.DEL_FOLDER,
       data: folderID,
@@ -78,7 +74,7 @@ const FolderList = (props) => {
   return (
     <div>
       <ul>
-        {props.folders.map((e, index) => {
+        {props.folders.map((e: Folder, index: number) => {
           return (
             <FolderItem key={index} data={e} onRemoveFolder={onRemoveFolder} />
           )
@@ -97,7 +93,7 @@ const FolderList = (props) => {
         />
         <button
           type="button"
-          className={classes.button}
+          className="btn m-2"
           onClick={() => {
             createFolder(
               folderName,

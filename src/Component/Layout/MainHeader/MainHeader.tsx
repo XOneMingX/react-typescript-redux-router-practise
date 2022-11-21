@@ -2,9 +2,10 @@ import React from "react"
 import LoginManager from "../../../Login/LoginManager"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
+import { ApplicationState } from "../../../Redux/reducers/rootReducer"
 
-const MainHeader = (props) => {
-  const userState = useSelector((state) => {
+const MainHeader: React.FC = () => {
+  const userState = useSelector((state: ApplicationState) => {
     return state.authReducer.userdata
   })
 

@@ -1,8 +1,9 @@
 import React from "react"
 import { useSelector } from "react-redux"
+import { ApplicationState } from "../../../Redux/reducers/rootReducer"
 
-const SideMenu = () => {
-  const userState = useSelector((state) => {
+const SideMenu: React.FC = () => {
+  const userState = useSelector((state: ApplicationState) => {
     return state.authReducer.userdata
   })
 

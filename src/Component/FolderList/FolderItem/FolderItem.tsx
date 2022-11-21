@@ -1,7 +1,13 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import Folder from "../../../Model/Folder"
 
-const FolderItem = (props) => {
+interface folderItemProps {
+  data: Folder
+  onRemoveFolder: (folderID: string) => void
+}
+
+const FolderItem: React.FC<folderItemProps> = (props) => {
   return (
     <li
       key={props.data.id}
