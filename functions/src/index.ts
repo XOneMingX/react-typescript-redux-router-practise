@@ -50,3 +50,5 @@ exports.newUser = functions
       return null
     }
   })
+
+//firebase emulators:start --export-on-exit=./saved-data
