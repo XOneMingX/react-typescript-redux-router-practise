@@ -6,10 +6,18 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
   },
   "compileOnSave": true,
   "include": [
-    "src"
+    "src",
+    "node_modules/@types/node/"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

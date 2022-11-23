@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore"
 
 import { db } from "../../Config/Firebase"
+import Folder from "../../Model/Folder"
 
 const folderDatabase = collection(db, "Folder")
 const todoDatabase = collection(db, "TodoList")
