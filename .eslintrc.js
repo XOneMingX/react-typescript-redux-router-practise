@@ -82,5 +82,6 @@ module.exports = {
     "react/prop-types": ["off"],
     // "lines-between-class-members": ["error", "always"],
     // "no-unused-vars": "error",
+
   },
 }

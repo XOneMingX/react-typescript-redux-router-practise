@@ -21,6 +21,7 @@ module.exports = {
   ignorePatterns: ["/lib/**/*"],
   plugins: ["@typescript-eslint", "import", "prettier"],
   rules: {
+    "@typescript-eslint/no-var-requires": 0,
     "no-mixed-spaces-and-tabs": 0,
     indent: [2, 2, { SwitchCase: 1 }],
     quotes: ["error", "double"],

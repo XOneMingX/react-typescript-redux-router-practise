@@ -1,5 +1,5 @@
-import * as functions from "firebase-functions"
-import * as admin from "firebase-admin"
+const functions = require("firebase-functions")
+const admin = require("firebase-admin")
 
 try {
   admin.initializeApp(functions.config().firebase)
@@ -10,7 +10,7 @@ import express from "express"
 import bodyParser from "body-parser"
 import cors from "cors"
 import { addUser } from "./helperFunction/userDBHelper"
-import { userInit } from "./modal/User"
+// import { userInit } from "./modal/User"
 
 const app = express()
 
@@ -35,9 +35,10 @@ exports.newUser = functions
   .auth.user()
   .onCreate(async (user: any) => {
     try {
+      console.log(user)
       const uid = user.uid
 
-      addUser(uid, userInit)
+      addUser(uid, user)
         .then((result) => {
           return 0
         })

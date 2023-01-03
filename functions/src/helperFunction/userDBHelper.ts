@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin"
-import { User } from "../modal/User"
+import User from "../modal/User"
 
 const db = admin.firestore()
 
